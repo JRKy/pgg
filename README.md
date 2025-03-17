@@ -17,5 +17,5 @@ Live demo: [https://jrky.github.io/pgg/](https://jrky.github.io/pgg/)
 ## Installation
 1. **Clone the Repo**:
    ```bash
-   git clone https://github.com/jrky/pgg.git
+   git clone https://github.com/JRKy/pgg.git
    cd pgg
