@@ -4,7 +4,6 @@ class UIController {
         this.presets = null;
         this.presetVersion = null;
 
-        // Set initial random passphrase
         document.getElementById('seed-value').value = this.generateRandomPassphrase();
 
         this.setupEventListeners();
@@ -12,12 +11,11 @@ class UIController {
         this.setupKeyboardNavigation();
         this.loadPresets().then(() => {
             this.setupPresets();
-            // Apply "Balanced" preset on startup
             if (this.presets && this.presets.balanced) {
                 this.applyPreset(this.presets.balanced.config);
             }
-            this.generateGrid(); // Generate initial grid with Balanced settings
-            this.loadFromURL(); // Load settings from URL if present
+            this.generateGrid();
+            this.loadFromURL();
         });
     }
     
@@ -31,17 +29,15 @@ class UIController {
             'ring', 'river', 'road', 'rock', 'roof', 'rose', 'sand', 'sea', 'ship', 'shoe', 'sky', 'snake', 'snow', 'sock', 'soup', 'star', 
             'stone', 'sun', 'table', 'tail', 'tent', 'time', 'tree', 'truck', 'vine', 'wall', 'wave', 'wind', 'wing', 'wolf', 'wood', 'yard', 
             'zebra', 'ball', 'bell', 'cake', 'card', 'drum', 'fish', 'glow', 'hope', 'love', 'play', 'song', 'talk', 'walk', 'wish', 'year'
-        ]; // 128 words
+        ];
         return `${words[Math.floor(Math.random() * words.length)]}-${words[Math.floor(Math.random() * words.length)]}-${words[Math.floor(Math.random() * words.length)]}`;
     }
     
     setupEventListeners() {
-        // Seed value input
         document.getElementById('seed-value').addEventListener('input', () => {
             this.generateGrid();
         });
 
-        // Random seed button
         document.getElementById('random-seed-btn').addEventListener('click', () => {
             const seedType = document.getElementById('seed-type').value;
             let newSeed;
@@ -54,44 +50,45 @@ class UIController {
             this.generateGrid();
         });
 
-        // Character set checkboxes
         ['uppercase', 'lowercase', 'numbers', 'special', 'avoid-ambiguous'].forEach(id => {
             document.getElementById(id).addEventListener('change', () => {
                 this.generateGrid();
             });
         });
 
-        // Grid size inputs
         ['grid-rows', 'grid-cols'].forEach(id => {
             document.getElementById(id).addEventListener('input', () => {
                 this.generateGrid();
             });
         });
 
-        // Shading select
         document.getElementById('shading').addEventListener('change', () => {
             this.generateGrid();
         });
 
-        // Inner lines checkbox
         document.getElementById('inner-lines').addEventListener('change', () => {
             this.generateGrid();
         });
 
-        // Colorblind mode checkbox
         document.getElementById('colorblind-mode').addEventListener('change', (e) => {
             document.body.classList.toggle('colorblind-mode', e.target.checked);
             this.generateGrid();
         });
 
-        // Grid theme select
         document.getElementById('grid-theme').addEventListener('change', (e) => {
             const theme = e.target.value;
             localStorage.setItem('gridTheme', theme);
-            this.generateGrid(); // Regenerate to apply theme
+            this.generateGrid();
         });
 
-        // Print button
+        document.getElementById('color-numbers').addEventListener('change', () => {
+            this.generateGrid();
+        });
+
+        document.getElementById('color-specials').addEventListener('change', () => {
+            this.generateGrid();
+        });
+
         document.getElementById('print-btn').addEventListener('click', () => {
             const rows = parseInt(document.getElementById('grid-rows').value) || 16;
             const cols = parseInt(document.getElementById('grid-cols').value) || 16;
@@ -104,20 +101,18 @@ class UIController {
             window.print();
         });
 
-        // Share button
         document.getElementById('share-btn').addEventListener('click', () => {
             const options = this.getOptionsFromUI();
             const url = new URL(window.location);
             Object.entries(options).forEach(([key, value]) => {
                 url.searchParams.set(key, value);
             });
-            url.searchParams.set('theme', document.getElementById('grid-theme').value); // Include theme in URL
+            url.searchParams.set('theme', document.getElementById('grid-theme').value);
             navigator.clipboard.writeText(url.toString())
                 .then(() => alert('Grid URL copied to clipboard!'))
                 .catch(err => alert('Failed to copy URL: ' + err));
         });
 
-        // Export PNG button
         document.getElementById('export-png-btn').addEventListener('click', () => {
             html2canvas(document.getElementById('password-grid')).then(canvas => {
                 const link = document.createElement('a');
@@ -127,7 +122,6 @@ class UIController {
             }).catch(err => alert('Failed to export PNG: ' + err));
         });
 
-        // Export CSV button
         document.getElementById('export-csv-btn').addEventListener('click', () => {
             const gridData = this.gridGenerator.generateGrid().grid;
             let csv = 'Row,Column,Value\n';
@@ -151,7 +145,8 @@ class UIController {
             if (key === 'gridRows' || key === 'gridCols' || key === 'shadingOption') {
                 options[key] = parseInt(value, 10);
             } else if (key === 'includeUpper' || key === 'includeLower' || key === 'includeNumbers' || 
-                       key === 'includeSpecial' || key === 'avoidAmbiguous' || key === 'innerLines') {
+                       key === 'includeSpecial' || key === 'avoidAmbiguous' || key === 'innerLines' ||
+                       key === 'colorNumbers' || key === 'colorSpecials') {
                 options[key] = value === 'true';
             } else if (key === 'theme') {
                 document.getElementById('grid-theme').value = value;
@@ -280,6 +275,8 @@ class UIController {
             button.setAttribute('title', preset.description);
             button.classList.add('preset-button');
             button.addEventListener('click', () => {
+                presetContainer.querySelectorAll('.preset-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
                 this.applyPreset(preset.config);
                 this.generateGrid();
             });
@@ -291,8 +288,7 @@ class UIController {
         versionInfo.textContent = `Preset version: ${this.presetVersion}`;
         versionInfo.setAttribute('aria-label', `Current preset version: ${this.presetVersion}`);
         presetContainer.appendChild(versionInfo);
-		
-		// Set initial active preset (Balanced)
+
         presetContainer.querySelector('.preset-button:nth-child(2)').classList.add('active');
     }
     
@@ -335,7 +331,9 @@ class UIController {
             gridRows: parseInt(document.getElementById('grid-rows').value, 10) || 16,
             gridCols: parseInt(document.getElementById('grid-cols').value, 10) || 16,
             shadingOption: parseInt(document.getElementById('shading').value, 10) || 0,
-            innerLines: document.getElementById('inner-lines').checked
+            innerLines: document.getElementById('inner-lines').checked,
+            colorNumbers: document.getElementById('color-numbers').checked,
+            colorSpecials: document.getElementById('color-specials').checked
         };
         return options;
     }
@@ -358,7 +356,6 @@ class UIController {
         let table = document.createElement('table');
         table.className = 'grid';
         
-        // Apply selected theme
         const theme = document.getElementById('grid-theme').value;
         table.classList.add(`theme-${theme}`);
         
@@ -366,25 +363,33 @@ class UIController {
             table.classList.add('with-inner-lines');
         }
         
-        switch (parseInt(this.gridGenerator.options.shadingOption)) {
-            case 1:
-                table.classList.add('checkerboard-2x2');
-                break;
-            case 2:
-                table.classList.add('alt-rows');
-                break;
-            case 3:
-                table.classList.add('diag-stripes');
-                break;
-            case 4:
-                table.classList.add('quadrants');
-                break;
-            case 5:
-                table.classList.add('sparse-dots');
-                break;
+        if (!document.body.classList.contains('colorblind-mode')) {
+            switch (parseInt(this.gridGenerator.options.shadingOption)) {
+                case 1:
+                    table.classList.add('checkerboard-2x2');
+                    break;
+                case 2:
+                    table.classList.add('alt-rows');
+                    break;
+                case 3:
+                    table.classList.add('diag-stripes');
+                    break;
+                case 4:
+                    table.classList.add('quadrants');
+                    break;
+                case 5:
+                    table.classList.add('sparse-dots');
+                    break;
+            }
+        }
+
+        if (this.gridGenerator.options.colorNumbers) {
+            table.classList.add('color-numbers');
+        }
+        if (this.gridGenerator.options.colorSpecials) {
+            table.classList.add('color-specials');
         }
         
-        // Header with "GRID (SEED VALUE)"
         let thead = document.createElement('thead');
         let titleRow = document.createElement('tr');
         let titleCell = document.createElement('th');
@@ -410,7 +415,6 @@ class UIController {
         thead.appendChild(headerRow);
         table.appendChild(thead);
         
-        // Body
         let tbody = document.createElement('tbody');
         
         gridData.forEach((row, rowIndex) => {
@@ -440,7 +444,6 @@ class UIController {
         
         table.appendChild(tbody);
         
-        // Footer with column letters first, then character sets
         let tfoot = document.createElement('tfoot');
         let footerRow = document.createElement('tr');
         let bottomCornerCell = document.createElement('th');
@@ -480,7 +483,9 @@ class UIController {
             gridRows: 'grid-rows',
             gridCols: 'grid-cols',
             shadingOption: 'shading',
-            innerLines: 'inner-lines'
+            innerLines: 'inner-lines',
+            colorNumbers: 'color-numbers',
+            colorSpecials: 'color-specials'
         };
         Object.entries(config).forEach(([key, value]) => {
             const elementId = idMap[key] || key;
@@ -501,7 +506,7 @@ class UIController {
     saveSettings() {
         try {
             const options = this.getOptionsFromUI();
-            options.theme = document.getElementById('grid-theme').value; // Save theme
+            options.theme = document.getElementById('grid-theme').value;
             localStorage.setItem('passGridOptions', JSON.stringify(options));
         } catch (e) {
             console.warn('Could not save settings to localStorage', e);
@@ -526,11 +531,13 @@ class UIController {
                 document.getElementById('shading').value = options.shadingOption || 0;
                 document.getElementById('inner-lines').checked = options.innerLines !== false;
                 document.getElementById('grid-theme').value = options.theme || 'classic';
+                document.getElementById('color-numbers').checked = options.colorNumbers !== false;
+                document.getElementById('color-specials').checked = options.colorSpecials !== false;
             }
         } catch (e) {
             console.warn('Could not load settings from localStorage', e);
         }
-        this.generateGrid(); // Generate after loading settings
+        this.generateGrid();
     }
     
     generateGrid() {

@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #2563eb; /* Darker blue for better contrast */
+    --primary-color: #2563eb;
     --light-bg: #fafafa;
     --grid-border: #888;
     --header-bg: #e3e3e3;
@@ -63,7 +63,7 @@ footer {
     margin-top: 40px;
     padding-top: 20px;
     border-top: 1px solid #ddd;
-    color: #555; /* Darker for contrast */
+    color: #555;
     font-size: 0.9em;
 }
 
@@ -73,7 +73,7 @@ footer a {
 }
 
 .options-panel {
-    background-color: #f5f5f5; /* Slightly darker to separate */
+    background-color: #f5f5f5;
     padding: 25px;
     border-radius: 8px;
     margin-bottom: 40px;
@@ -81,7 +81,7 @@ footer a {
 }
 
 .option-row {
-    margin-bottom: 15px; /* More spacing */
+    margin-bottom: 15px;
     display: flex;
     align-items: center;
     gap: 12px;
@@ -99,7 +99,7 @@ footer a {
 .option-group {
     border: none;
     padding: 0;
-    margin-bottom: 30px; /* More separation */
+    margin-bottom: 30px;
 }
 
 .option-group legend {
@@ -118,7 +118,7 @@ label {
     display: block;
     margin-bottom: 6px;
     font-weight: 600;
-    font-size: 1em; /* Slightly smaller, consistent */
+    font-size: 1em;
 }
 
 input[type="text"],
@@ -135,7 +135,7 @@ select {
 .checkbox-group {
     display: flex;
     align-items: center;
-    margin-bottom: 15px; /* More spacing */
+    margin-bottom: 15px;
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -144,7 +144,7 @@ select {
 
 .secondary-button,
 .preset-button {
-    padding: 12px 24px; /* Larger for prominence */
+    padding: 12px 24px;
     border: 1px solid var(--primary-color);
     border-radius: 6px;
     cursor: pointer;
@@ -165,7 +165,7 @@ select {
 }
 
 .preset-button.active {
-    background-color: #d2e3fc; /* Highlight active preset */
+    background-color: #d2e3fc;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
@@ -175,9 +175,9 @@ select {
     text-align: center;
     display: flex;
     justify-content: center;
-    gap: 15px; /* More spacing */
+    gap: 15px;
     flex-wrap: wrap;
-    background-color: #f0f0f0; /* Subtle background */
+    background-color: #f0f0f0;
     border-radius: 8px;
 }
 
@@ -189,11 +189,11 @@ select {
     display: flex;
     flex-wrap: wrap;
     margin-bottom: 25px;
-    background: linear-gradient(135deg, #f0f0f0, #f5f5f5); /* Softer gradient */
+    background: linear-gradient(135deg, #f0f0f0, #f5f5f5);
     padding: 20px;
     border-radius: 8px;
     border: 1px solid #eee;
-    font-size: 1.1em; /* Larger for readability */
+    font-size: 1.1em;
 }
 
 .status-item {
@@ -208,7 +208,7 @@ select {
 }
 
 .status-item span:not(.status-label) {
-    font-weight: 600; /* Bold values */
+    font-weight: 600;
 }
 
 .weak { color: var(--weak-color); }
@@ -261,33 +261,35 @@ table.grid th.grid-title {
 }
 
 table.grid.with-inner-lines tr:nth-child(2n+2):not(:last-child) td {
-    border-bottom: 1px solid #ff0000;
+    border-bottom: 1px solid #888;
 }
 
-table.grid.with-inner-lines tr td:nth-child(2n+3):not(:last-child) {
-    border-right: 1px solid #000000;
+table.grid.with-inner-lines td:nth-child(2n+2) {
+    border-right: 1px solid #888;
 }
 
-table.grid .shaded-cell {
-    background-color: var(--cell-bg2);
-}
-
-table.grid .number-cell {
+/* Color options applied via table classes */
+table.grid.color-numbers td.number-cell {
     color: var(--number-color);
 }
 
-table.grid .special-cell {
+table.grid.color-specials td.special-cell {
     color: var(--special-color);
 }
 
-body.colorblind-mode table.grid .number-cell {
-    color: inherit;
-    font-weight: bold;
+/* Colorblind Mode with Alternating Bands */
+body.colorblind-mode table.grid {
+    border: 2px solid #666;
 }
 
-body.colorblind-mode table.grid .special-cell {
-    color: inherit;
-    text-decoration: underline;
+body.colorblind-mode table.grid tr:nth-child(odd) td {
+    background-color: #ccc;
+    color: #333;
+}
+
+body.colorblind-mode table.grid tr:nth-child(even) td {
+    background-color: #666;
+    color: #ddd;
 }
 
 /* Theme Styles */
@@ -454,7 +456,7 @@ table.grid.sparse-dots td:nth-child(7n+3):nth-child(4n+1) {
 
 .preset-version {
     font-size: 0.9em;
-    color: #555; /* Darker for contrast */
+    color: #555;
     margin-left: 12px;
 }
 

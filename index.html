@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>Password Grid Generator</title>
     <meta name="description" content="Create secure password grids for generating strong, memorable passwords">
-    <link rel="stylesheet" href="css/styles.css?v=1.2">
+    <link rel="stylesheet" href="css/styles.css?v=2.0">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
@@ -117,14 +117,14 @@
                     <div class="checkbox-group">
                         <input type="checkbox" id="inner-lines" 
                                aria-checked="false" role="checkbox">
-                        <label for="inner-lines">Show Alternating Grid Lines (Red horizontal, Black vertical)</label>
+                        <label for="inner-lines">Show Alternating Grid Lines (Grey)</label>
                     </div>
                 </div>
                 <div class="option-row">
                     <div class="checkbox-group">
                         <input type="checkbox" id="colorblind-mode" 
                                aria-checked="false" role="checkbox">
-                        <label for="colorblind-mode">Colorblind Mode (Patterns instead of colors)</label>
+                        <label for="colorblind-mode">Colorblind Mode (Alternating bands)</label>
                     </div>
                 </div>
                 <div class="option-row">
@@ -136,6 +136,20 @@
                         <option value="minimal">Minimal</option>
                         <option value="forest">Forest</option>
                     </select>
+                </div>
+                <div class="option-row">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="color-numbers" checked 
+                               aria-checked="true" role="checkbox">
+                        <label for="color-numbers">Color Numbers (Blue)</label>
+                    </div>
+                </div>
+                <div class="option-row">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="color-specials" checked 
+                               aria-checked="true" role="checkbox">
+                        <label for="color-specials">Color Specials (Red)</label>
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -196,7 +210,7 @@
                 <li>Follow a movement pattern (e.g., down to A2, right to B2, for "Kj9").</li>
                 <li>The characters you encounter become your password.</li>
                 <li>Use different starting positions for different services (e.g., A1 for Gmail, C5 for Netflix—same pattern, different passwords).</li>
-                <li>Numbers appear in <span class="blue-text">BLUE</span> (or bold in Colorblind Mode) and special characters in <span class="red-text">RED</span> (or underlined) for easy identification.</li>
+                <li>Numbers appear in <span class="blue-text">BLUE</span> and special characters in <span class="red-text">RED</span> if coloring is enabled (toggle in Appearance). Grey grid lines can be added for clarity.</li>
                 <li>For maximum security, use patterns with at least 12-16 characters—check the status panel above the grid for strength.</li>
                 <li>Adjust options above—the grid updates instantly.</li>
             </ol>
@@ -207,17 +221,15 @@
         </footer>
     </div>
 
-    <script src="js/grid-generator.js?v=1.2"></script>
-    <script src="js/ui-controller.js?v=1.2"></script>
-    <script src="js/app.js?v=1.2"></script>
+    <script src="js/grid-generator.js?v=2.0"></script>
+    <script src="js/ui-controller.js?v=2.0"></script>
+    <script src="js/app.js?v=2.0"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // Unregister old Service Workers
                 navigator.serviceWorker.getRegistrations().then(registrations => {
                     registrations.forEach(reg => reg.unregister());
                 }).then(() => {
-                    // Register new Service Worker
                     navigator.serviceWorker.register('/sw.js?v=' + Date.now())
                         .then(reg => console.log('Service Worker registered'))
                         .catch(err => console.log('Service Worker registration failed: ', err));
