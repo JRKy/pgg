@@ -45,11 +45,6 @@ Live demo: [https://jrky.github.io/pgg/](https://jrky.github.io/pgg/)
 - `presets.json`: Preset configs
 - `img/icons/`: App icons
 
-## Development
-- **Update Assets**: Bump `?v=1.2` to `?v=1.3` in `index.html` after changes for cache busting.
-- **Test Locally**: Serve and verify in browser.
-- **Deploy**: Push to GitHub, check `https://jrky.github.io/pgg/`.
-
 ## Credits
 Created by [jrky](https://github.com/JRKy) with assist from Grok (xAI). Contributions welcome—fork, tweak, PR!
 
