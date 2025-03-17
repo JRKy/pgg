@@ -19,3 +19,39 @@ Live demo: [https://jrky.github.io/pgg/](https://jrky.github.io/pgg/)
    ```bash
    git clone https://github.com/JRKy/pgg.git
    cd pgg
+   ```
+2. **Serve Locally** (optional):
+   - Use `npx serve` or `python -m http.server 8000`.
+   - Open `http://localhost:8000`.
+3. **Deploy to GitHub Pages**:
+   - Push to `main` branch.
+   - Enable GitHub Pages: Settings > Pages > Source: `main`, Folder: `/ (root)`.
+
+## Usage
+1. **Set a Seed**: Enter a passphrase or hit "Random Seed."
+2. **Customize**: Tweak character sets, grid size, shading, and theme.
+3. **Generate**: Grid updates live—start at a cell (e.g., A1), trace a pattern (e.g., down, right) for your password.
+4. **Export**: Print, share URL, or save as PNG/CSV.
+5. **Tips**: Aim for 12-16 character patterns—check status panel for strength.
+
+## Files
+- `index.html`: Core app page
+- `sw.js`: Service Worker for offline support
+- `css/styles.css`: Styles with theme definitions
+- `js/ui-controller.js`: UI and grid rendering logic
+- `js/grid-generator.js`: Grid generation engine
+- `js/app.js`: App initialization
+- `manifest.json`: PWA manifest
+- `presets.json`: Preset configs
+- `img/icons/`: App icons
+
+## Development
+- **Update Assets**: Bump `?v=1.2` to `?v=1.3` in `index.html` after changes for cache busting.
+- **Test Locally**: Serve and verify in browser.
+- **Deploy**: Push to GitHub, check `https://jrky.github.io/pgg/`.
+
+## Credits
+Created by [jrky](https://github.com/JRKy) with assist from Grok (xAI). Contributions welcome—fork, tweak, PR!
+
+## License
+MIT License—free to use, modify, share. See [LICENSE](LICENSE) for details.
